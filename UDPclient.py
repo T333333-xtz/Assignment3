@@ -44,3 +44,19 @@ def main():
                         file_size = int(parts[3])
                         new_port = int(parts[5])
                         new_server_address = (hostname, new_port)
+
+                        with open(file_name, 'wb') as output_file:
+                            block_size = 1000
+                            for start in range(0, file_size, block_size):
+                                end = min(start + block_size - 1, file_size - 1)
+                                file_request = f'FILE {file_name} GETSTART {start} END {end}'
+                                data_response = sendAndReceive(sock, new_server_address, file_request)
+
+                                if data_response:
+                                    data_parts = data_response.split(" DATA ")
+                                    if len(data_parts) > 1:
+                                        base64Data = data_parts[1].strip()
+                                        fileData = base64.b64decode(base64Data)
+                                        output_file.seek(start)
+                                        output_file.write(fileData)
+                                        print("*", end="", flush=True)
