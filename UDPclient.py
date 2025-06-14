@@ -30,3 +30,17 @@ def main():
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_address = (hostname, port)
+    try:
+        with open(file_list, 'r') as f:
+            for line in f:
+                file_name = line.strip()
+                print(f"Downloading {file_name}...")
+                download_message = f'DOWNLOAD {file_name}'
+                response = sendAndReceive(sock, server_address, download_message)
+
+                if response:
+                    parts = response.split(" ")
+                    if parts[0] == 'OK':
+                        file_size = int(parts[3])
+                        new_port = int(parts[5])
+                        new_server_address = (hostname, new_port)
