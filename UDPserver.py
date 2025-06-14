@@ -24,3 +24,12 @@ try:
                     close_response = f'FILE {file_name} CLOSE_OK'
                     new_socket.sendto(close_response.encode(), client)
                     break
+
+                elif parts[0] == 'FILE' and parts[3] == 'GETSTART':
+                    start = int(parts[4])
+                    end = int(parts[6])
+                    file.seek(start)
+                    actual_bytes = file.read(end - start + 1)
+                    base64Data = base64.b64encode(actual_bytes).decode()
+                    response = f'FILE {file_name} OK START {start} END {end} DATA {base64Data}'
+                    new_socket.sendto(response.encode(), client)
