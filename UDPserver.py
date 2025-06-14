@@ -63,3 +63,5 @@ def main():
             else:
                 error_response = f'ERR {file_name} NOT_FOUND'
                 welcome_socket.sendto(error_response.encode(), client_address)
+if __name__ == "__main__":
+    main()
