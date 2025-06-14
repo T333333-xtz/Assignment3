@@ -49,3 +49,17 @@ def main():
     welcome_socket.bind(('0.0.0.0', port))
 
     print(f"Server is listening on port {port}")
+    
+    while True:
+        data, client_address = welcome_socket.recvfrom(1024)
+        client_request = data.decode().strip()
+        parts = client_request.split(" ")
+
+        if parts[0] == 'DOWNLOAD':
+            file_name = parts[1]
+            if os.path.exists(file_name):
+                # 创建新线程处理文件传输
+                threading.Thread(target=handleFileTransmission, args=(file_name, client_address)).start()
+            else:
+                error_response = f'ERR {file_name} NOT_FOUND'
+                welcome_socket.sendto(error_response.encode(), client_address)
