@@ -37,3 +37,15 @@ try:
         print(f"Error handling file transmission: {e}")
     finally:
         new_socket.close()
+        
+def main():
+    import sys
+    if len(sys.argv) != 2:
+        print("Usage: python3 UDPserver.py <port>")
+        sys.exit(1)
+
+    port = int(sys.argv[1])
+    welcome_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    welcome_socket.bind(('0.0.0.0', port))
+
+    print(f"Server is listening on port {port}")
