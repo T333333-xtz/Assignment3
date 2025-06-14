@@ -60,3 +60,13 @@ def main():
                                         output_file.seek(start)
                                         output_file.write(fileData)
                                         print("*", end="", flush=True)
+                            close_message = f'FILE {file_name} CLOSE'
+                            close_response = sendAndReceive(sock, new_server_address, close_message)
+                            if close_response and close_response.startswith(f'FILE {file_name} CLOSE_OK'):
+                                print(f"\nDownload of {file_name} completed.")
+                    elif parts[0] == 'ERR':
+                        print(f"Error: {response}")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        sock.close()
