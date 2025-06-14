@@ -33,3 +33,7 @@ try:
                     base64Data = base64.b64encode(actual_bytes).decode()
                     response = f'FILE {file_name} OK START {start} END {end} DATA {base64Data}'
                     new_socket.sendto(response.encode(), client)
+    except Exception as e:
+        print(f"Error handling file transmission: {e}")
+    finally:
+        new_socket.close()
